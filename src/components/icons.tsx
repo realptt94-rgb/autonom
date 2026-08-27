@@ -185,3 +185,50 @@ export function InfinityIcon({ className }: P) {
     </svg>
   );
 }
+
+export function DownloadIcon({ className }: P) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} {...S}>
+      <path d="M12 3.4v10.8m0 0 4.2-4.2M12 14.2 7.8 10" />
+      <path d="M4.4 15.8v2.6a2 2 0 0 0 2 2h11.2a2 2 0 0 0 2-2v-2.6" />
+    </svg>
+  );
+}
+
+export function CloseIcon({ className }: P) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} {...S}>
+      <path d="M6.5 6.5l11 11M17.5 6.5l-11 11" />
+    </svg>
+  );
+}
+
+export function AppleIcon({ className }: P) {
+  return (
+    <svg viewBox="0 0 24 24" className={className}>
+      <path
+        fill="currentColor"
+        d="M16.7 12.9c0-2.1 1.7-3.1 1.8-3.2-1-1.4-2.5-1.6-3-1.6-1.3-.1-2.5.8-3.2.8-.7 0-1.7-.8-2.8-.8-1.4 0-2.8.8-3.5 2.1-1.5 2.6-.4 6.5 1.1 8.6.7 1 1.5 2.2 2.6 2.1 1.1 0 1.5-.7 2.8-.7s1.7.7 2.8.7c1.2 0 1.9-1 2.6-2.1.8-1.2 1.2-2.4 1.2-2.5 0 0-2.3-.9-2.4-3.4ZM14.6 6.6c.6-.7 1-1.7.9-2.7-.9 0-1.9.6-2.5 1.3-.6.6-1 1.6-.9 2.6 1 .1 2-.5 2.5-1.2Z"
+      />
+    </svg>
+  );
+}
+
+export function WindowsIcon({ className }: P) {
+  return (
+    <svg viewBox="0 0 24 24" className={className}>
+      <path fill="currentColor" d="M4 5.8 10.8 4.9v6.4H4Zm7.8-1 8.2-1.1v7.6h-8.2ZM4 12.7h6.8v6.4L4 18.2Zm7.8 0h8.2v7.6l-8.2-1.1Z" />
+    </svg>
+  );
+}
+
+export function LinuxIcon({ className }: P) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} {...S}>
+      <path d="M12 3.4c-2.6 0-4 2.2-4 5.2 0 1.6.2 3.1-.3 4.6-.6 1.7-1.9 3.3-1.9 5 0 1.6 1.3 2.4 3 2.4 1 0 1.6-.4 3.2-.4s2.2.4 3.2.4c1.7 0 3-.8 3-2.4 0-1.7-1.3-3.3-1.9-5-.5-1.5-.3-3-.3-4.6 0-3-1.4-5.2-4-5.2Z" />
+      <path d="M9.6 8.6c.5.5 1.3.8 2.4.8s1.9-.3 2.4-.8" />
+      <circle cx="10.5" cy="7" r="0.7" fill="currentColor" stroke="none" />
+      <circle cx="13.5" cy="7" r="0.7" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}

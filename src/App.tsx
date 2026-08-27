@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Console from "./components/Console";
 import {
   Agents,
@@ -12,7 +12,9 @@ import {
   Pricing,
   Proof,
 } from "./components/Sections";
-import { ArrowIcon, ChipIcon, PlugIcon } from "./components/icons";
+import { AppleIcon, ArrowIcon, CheckIcon, ChipIcon, DownloadIcon, LinuxIcon, PlugIcon, WindowsIcon } from "./components/icons";
+import InstallModal from "./components/InstallModal";
+import { useInstall, type OS } from "./lib/install";
 
 const WORDS = ["SANS TOKEN.", "SANS API KEY.", "SANS CLOUD.", "SANS FACTURE."];
 
@@ -31,7 +33,7 @@ function RotatingWord() {
   );
 }
 
-function TopBar() {
+function TopBar({ installed, onInstall }: { installed: boolean; onInstall: () => void }) {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 12);
@@ -71,19 +73,22 @@ function TopBar() {
             <span className="anim-pulsedot h-2 w-2 rounded-full bg-pine" />
             0 token utilisé
           </span>
-          <a
-            href="#installation"
-            className="rounded-md bg-ink px-4 py-2 font-mono text-[12px] font-bold uppercase tracking-wider text-lime transition-all hover:bg-pinedeep hover:text-paper active:scale-95"
+          <button
+            onClick={onInstall}
+            className={`flex items-center gap-2 rounded-md px-4 py-2 font-mono text-[12px] font-bold uppercase tracking-wider transition-all active:scale-95 ${
+              installed ? "cursor-default bg-pine text-paper" : "bg-ink text-lime hover:bg-pinedeep hover:text-paper"
+            }`}
           >
-            Installer
-          </a>
+            {installed ? <CheckIcon className="h-3.5 w-3.5" /> : <DownloadIcon className="h-3.5 w-3.5" />}
+            {installed ? "Installée" : "Installer l'app"}
+          </button>
         </div>
       </div>
     </header>
   );
 }
 
-function Hero() {
+function Hero({ installed, onInstall }: { installed: boolean; onInstall: () => void }) {
   return (
     <section className="relative overflow-hidden">
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 pb-20 pt-14 sm:px-8 lg:grid-cols-[1.02fr_0.98fr] lg:gap-14 lg:pb-24 lg:pt-20">
@@ -110,13 +115,13 @@ function Hero() {
             le forfait est fixe, l'usage est illimité.
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-4">
-            <a
-              href="#installation"
+            <button
+              onClick={onInstall}
               className="group inline-flex items-center gap-3 rounded-lg bg-ink px-7 py-4 font-mono text-[13px] font-bold uppercase tracking-wider text-lime shadow-[6px_6px_0_0_var(--color-lime)] transition-all hover:-translate-y-0.5 hover:shadow-[8px_8px_0_0_var(--color-lime)] active:translate-y-0 active:shadow-[3px_3px_0_0_var(--color-lime)]"
             >
-              Installer la démo
-              <ArrowIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </a>
+              {installed ? <CheckIcon className="h-4 w-4" /> : <DownloadIcon className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />}
+              {installed ? "App installée — ouvrez-la" : "Installer l'application"}
+            </button>
             <a
               href="#moteur"
               className="inline-flex items-center gap-2.5 rounded-lg border-2 border-ink px-6 py-[14px] font-mono text-[13px] font-bold uppercase tracking-wider text-ink transition-colors hover:bg-ink hover:text-paper"
@@ -125,8 +130,14 @@ function Hero() {
             </a>
           </div>
           <p className="mt-8 font-mono text-[11.5px] uppercase tracking-wider text-mut">
-            qwen3.8-27b · q4_k_m · 16,9 Go · macos — linux — wsl
+            qwen3.8-27b · q4_k_m · 16,9 Go
           </p>
+          <div className="mt-3.5 flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[12px] text-mut">
+            <span className="flex items-center gap-2"><AppleIcon className="h-4 w-4 text-ink" /> macOS</span>
+            <span className="flex items-center gap-2"><WindowsIcon className="h-4 w-4 text-ink" /> Windows</span>
+            <span className="flex items-center gap-2"><LinuxIcon className="h-4 w-4 text-ink" /> Linux</span>
+            <span className="rounded-full bg-pine/15 px-2.5 py-0.5 text-[10.5px] font-bold uppercase tracking-wider text-pinedeep">installable en 1 clic</span>
+          </div>
         </div>
 
         {/* right — the product, live */}
@@ -143,6 +154,48 @@ function Hero() {
 }
 
 export default function App() {
+  const { canPrompt, installed, requestInstall, os } = useInstall();
+  const [guideOpen, setGuideOpen] = useState(false);
+  const [guideOs, setGuideOs] = useState<OS>(os);
+  const [toast, setToast] = useState<string | null>(null);
+  const toastTimer = useRef<number | null>(null);
+
+  function showToast(msg: string) {
+    setToast(msg);
+    if (toastTimer.current) window.clearTimeout(toastTimer.current);
+    toastTimer.current = window.setTimeout(() => setToast(null), 4200);
+  }
+
+  const openGuide = (o?: OS) => {
+    setGuideOs(o ?? os);
+    setGuideOpen(true);
+  };
+
+  const handleInstall = async () => {
+    if (installed) {
+      showToast("Autonome tourne déjà en application sur cette machine.");
+      return;
+    }
+    if (canPrompt) {
+      const ok = await requestInstall();
+      showToast(
+        ok
+          ? "Autonome est installée — ouvrez-la depuis votre Dock ou menu Démarrer."
+          : "Aucun souci : le guide d'installation reste disponible à tout moment."
+      );
+      return;
+    }
+    openGuide();
+  };
+
+  const handleNativeFromModal = async () => {
+    const ok = await requestInstall();
+    if (ok) {
+      setGuideOpen(false);
+      showToast("Autonome est installée — recherchez-la dans vos applications.");
+    }
+  };
+
   return (
     <div className="relative min-h-screen">
       {/* ambient layers */}
@@ -151,9 +204,9 @@ export default function App() {
       <div className="pointer-events-none absolute left-[-220px] top-[42%] h-[480px] w-[480px] rounded-full bg-lime/20 blur-[150px]" aria-hidden />
 
       <div className="relative">
-        <TopBar />
+        <TopBar installed={installed} onInstall={handleInstall} />
         <main>
-          <Hero />
+          <Hero installed={installed} onInstall={handleInstall} />
           <Marquee />
           <LiveStats />
           <CostCalc />
@@ -162,10 +215,30 @@ export default function App() {
           <Agents />
           <Pricing />
           <Faq />
-          <FinalCta />
+          <FinalCta onOpenInstall={openGuide} detectedOs={os} />
         </main>
         <Footer />
       </div>
+
+      <InstallModal
+        open={guideOpen}
+        initialOs={guideOs}
+        detectedOs={os}
+        canPrompt={canPrompt}
+        onRequestNative={handleNativeFromModal}
+        onClose={() => setGuideOpen(false)}
+      />
+
+      {toast && (
+        <div className="pointer-events-none fixed bottom-6 left-1/2 z-[60] w-max max-w-[92vw] -translate-x-1/2 px-4">
+          <div key={toast} className="anim-fadeup flex items-center gap-3 rounded-lg border border-linedark bg-ink px-5 py-3.5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.65)]">
+            <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-lime text-ink">
+              <CheckIcon className="h-3.5 w-3.5" />
+            </span>
+            <span className="text-[13.5px] text-paper">{toast}</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

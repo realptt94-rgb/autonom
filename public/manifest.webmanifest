@@ -1,0 +1,33 @@
+{
+  "name": "Autonome — Agents IA 100 % locaux, sans token",
+  "short_name": "Autonome",
+  "description": "L'orchestrateur d'agents IA qui tourne chez vous sur Qwen3.8-27B « Obliterated ». Aucun token, aucun cloud, aucune API key — installable sur macOS, Windows et Linux.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#edf1ea",
+  "theme_color": "#0b130e",
+  "lang": "fr",
+  "dir": "ltr",
+  "categories": ["productivity", "utilities", "developer-tools"],
+  "icons": [
+    { "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" },
+    {
+      "src": "https://image.qwenlm.ai/generated-images/5265bc6f-b1e4-45ed-aca9-f1dd85690d35/_result.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://image.qwenlm.ai/generated-images/5265bc6f-b1e4-45ed-aca9-f1dd85690d35/_result.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "prefer_related_applications": false
+}

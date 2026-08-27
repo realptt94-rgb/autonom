@@ -17,7 +17,12 @@ import {
   QuillIcon,
   RadarIcon,
   TableIcon,
+  AppleIcon,
+  WindowsIcon,
+  LinuxIcon,
+  DownloadIcon,
 } from "./icons";
+import type { OS } from "../lib/install";
 
 /* ---------------- helpers ---------------- */
 
@@ -740,48 +745,119 @@ export function Faq() {
 
 const INSTALL_CMD = "curl -sSL https://get.autonome.sh | bash";
 
-export function FinalCta() {
+export function FinalCta({
+  onOpenInstall,
+  detectedOs,
+}: {
+  onOpenInstall: (os?: OS) => void;
+  detectedOs: OS;
+}) {
   const [copied, setCopied] = useState(false);
   function copy() {
     navigator.clipboard?.writeText(INSTALL_CMD).catch(() => {});
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }
+
+  const systems: { os: OS; icon: typeof AppleIcon; name: string; how: string; detail: string }[] = [
+    {
+      os: "mac",
+      icon: AppleIcon,
+      name: "macOS",
+      how: "Dock & Launchpad",
+      detail: "Chrome, Edge, Brave ou Safari (Sonoma+) — fenêtre native, Spotlight compatible.",
+    },
+    {
+      os: "windows",
+      icon: WindowsIcon,
+      name: "Windows",
+      how: "Menu Démarrer",
+      detail: "Edge, Chrome ou Brave — raccourci automatique, épinglable en barre des tâches.",
+    },
+    {
+      os: "linux",
+      icon: LinuxIcon,
+      name: "Linux",
+      how: "Lanceur ou démon",
+      detail: "GNOME, KDE, i3… entrée .desktop générée, ou service systemd user via le terminal.",
+    },
+  ];
+
   return (
-    <section id="installation" className="relative scroll-mt-24 overflow-hidden bg-ink py-28">
+    <section id="installation" className="relative scroll-mt-24 overflow-hidden bg-ink py-24">
       <div className="bg-griddark pointer-events-none absolute inset-0" />
       <div className="pointer-events-none absolute -right-32 bottom-0 h-[420px] w-[420px] rounded-full bg-lime/10 blur-[130px]" />
-      <div className="relative mx-auto max-w-7xl px-5 text-center sm:px-8">
-        <Reveal>
+      <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
+        <Reveal className="text-center">
           <p className="flex items-center justify-center gap-2.5 font-mono text-[11.5px] font-bold uppercase tracking-[0.22em] text-lime">
-            <PlugIcon className="h-4 w-4" /> 90 secondes · macOS · Linux · Windows (WSL)
+            <DownloadIcon className="h-4 w-4" /> Installation · macOS · Windows · Linux
           </p>
-          <h2 className="mx-auto mt-6 max-w-4xl font-display text-5xl leading-[0.92] tracking-tight text-paper sm:text-7xl lg:text-8xl">
-            REPRENEZ <span className="text-lime">LA MAIN.</span>
+          <h2 className="mx-auto mt-6 max-w-5xl font-display text-5xl leading-[0.92] tracking-tight text-paper sm:text-7xl lg:text-8xl">
+            UNE APP. <span className="text-lime">TROIS SYSTÈMES.</span> ZÉRO TOKEN.
           </h2>
-          <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-mutdark">
-            Une commande, et le moteur s'installe chez vous. Votre première tâche autonome tourne avant la fin du café.
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-mutdark">
+            Autonome s'installe comme une application native — pas un onglet de plus. Après la première ouverture, le
+            service worker garde tout disponible <strong className="text-paper">hors-ligne</strong>, pour toujours.
           </p>
         </Reveal>
 
-        <Reveal delay={150}>
-          <div className="mx-auto mt-10 flex max-w-2xl items-center gap-3 rounded-xl border border-linedark bg-ink2/80 px-4 py-3.5 text-left shadow-[0_24px_60px_-20px_rgba(0,0,0,0.6)] sm:px-5">
-            <span className="font-mono text-lime">$</span>
-            <code className="min-w-0 flex-1 truncate font-mono text-[13.5px] text-paper sm:text-[15px]">{INSTALL_CMD}</code>
-            <button
-              onClick={copy}
-              className={`flex shrink-0 items-center gap-2 rounded-lg px-4 py-2 font-mono text-[12px] font-bold uppercase tracking-wider transition-all active:scale-95 ${
-                copied ? "bg-pine text-paper" : "bg-lime text-ink hover:bg-limedark"
-              }`}
-            >
-              {copied ? <CheckIcon className="h-4 w-4" /> : <CopyIcon className="h-4 w-4" />}
-              {copied ? "copié" : "copier"}
-            </button>
-          </div>
-          <div className="mx-auto mt-8 flex max-w-2xl flex-wrap items-center justify-center gap-x-7 gap-y-2 font-mono text-[12px] text-mutdark">
-            <span className="flex items-center gap-2"><HouseIcon className="h-4 w-4 text-lime" /> 100 % local</span>
-            <span className="flex items-center gap-2"><PlaneIcon className="h-4 w-4 text-lime" /> mode avion ok</span>
-            <span className="flex items-center gap-2"><EuroIcon className="h-4 w-4 text-lime" /> 0 € de token</span>
+        <div className="mt-14 grid gap-5 md:grid-cols-3">
+          {systems.map((s, i) => {
+            const Icon = s.icon;
+            const detected = s.os === detectedOs;
+            return (
+              <Reveal key={s.os} delay={i * 110} className={i === 1 ? "lg:-translate-y-3" : ""}>
+                <article className="card-hover group flex h-full flex-col rounded-xl border border-linedark bg-ink2/60 p-6 sm:p-7">
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="grid h-12 w-12 place-items-center rounded-lg bg-lime text-ink transition-transform group-hover:-rotate-6 group-hover:scale-105">
+                      <Icon className="h-6 w-6" />
+                    </span>
+                    {detected && (
+                      <span className="flex items-center gap-2 rounded-full border border-pine/50 bg-pine/15 px-3 py-1 font-mono text-[10.5px] font-bold uppercase tracking-wider text-lime">
+                        <span className="anim-pulsedot h-1.5 w-1.5 rounded-full bg-lime" /> détecté
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="mt-5 font-display text-3xl tracking-tight text-paper">{s.name}</h3>
+                  <p className="mt-1 font-mono text-[11.5px] uppercase tracking-wider text-lime">{s.how}</p>
+                  <p className="mt-3 flex-1 text-[14.5px] leading-relaxed text-mutdark">{s.detail}</p>
+                  <button
+                    onClick={() => onOpenInstall(s.os)}
+                    className="mt-6 flex w-full items-center justify-center gap-2.5 rounded-lg border-2 border-lime px-5 py-3 font-mono text-[12px] font-bold uppercase tracking-wider text-lime transition-all hover:bg-lime hover:text-ink active:scale-[0.98]"
+                  >
+                    <DownloadIcon className="h-4 w-4" />
+                    Installer sur {s.name}
+                  </button>
+                </article>
+              </Reveal>
+            );
+          })}
+        </div>
+
+        <Reveal delay={120}>
+          <div className="mx-auto mt-14 max-w-3xl">
+            <p className="flex items-center justify-center gap-4 font-mono text-[11px] uppercase tracking-[0.22em] text-mutdark">
+              <span className="h-px w-12 bg-linedark" /> ou par le terminal, moteur complet <span className="h-px w-12 bg-linedark" />
+            </p>
+            <div className="mt-5 flex items-center gap-3 rounded-xl border border-linedark bg-ink2/80 px-4 py-3.5 text-left shadow-[0_24px_60px_-20px_rgba(0,0,0,0.6)] sm:px-5">
+              <span className="font-mono text-lime">$</span>
+              <code className="min-w-0 flex-1 truncate font-mono text-[13.5px] text-paper sm:text-[15px]">{INSTALL_CMD}</code>
+              <button
+                onClick={copy}
+                className={`flex shrink-0 items-center gap-2 rounded-lg px-4 py-2 font-mono text-[12px] font-bold uppercase tracking-wider transition-all active:scale-95 ${
+                  copied ? "bg-pine text-paper" : "bg-lime text-ink hover:bg-limedark"
+                }`}
+              >
+                {copied ? <CheckIcon className="h-4 w-4" /> : <CopyIcon className="h-4 w-4" />}
+                {copied ? "copié" : "copier"}
+              </button>
+            </div>
+            <div className="mt-7 flex flex-wrap items-center justify-center gap-x-7 gap-y-2 font-mono text-[12px] text-mutdark">
+              <span className="flex items-center gap-2"><HouseIcon className="h-4 w-4 text-lime" /> 100 % local</span>
+              <span className="flex items-center gap-2"><PlaneIcon className="h-4 w-4 text-lime" /> mode avion ok</span>
+              <span className="flex items-center gap-2"><EuroIcon className="h-4 w-4 text-lime" /> 0 € de token</span>
+              <span className="flex items-center gap-2"><PlugIcon className="h-4 w-4 text-lime" /> mise à jour auto</span>
+            </div>
           </div>
         </Reveal>
       </div>
