@@ -1,216 +1,171 @@
-import { useCallback, useMemo, useState } from "react";
-import Builder from "./components/Builder";
-import TerminalPanel from "./components/TerminalPanel";
-import { Checklist, Compare, Footer, Prereqs } from "./components/Extras";
-import { ArrowIcon, LogoIcon, Reveal, Toast } from "./components/ui";
-import { BuilderState, DEFAULT_STATE, buildBlocks, fmtBytes, isValid, simFiles } from "./lib/model";
+import { useEffect, useState } from "react";
+import Console from "./components/Console";
+import {
+  Agents,
+  CostCalc,
+  Engine,
+  Faq,
+  FinalCta,
+  Footer,
+  LiveStats,
+  Marquee,
+  Pricing,
+  Proof,
+} from "./components/Sections";
+import { ArrowIcon, ChipIcon, PlugIcon } from "./components/icons";
 
-function Background() {
+const WORDS = ["SANS TOKEN.", "SANS API KEY.", "SANS CLOUD.", "SANS FACTURE."];
+
+function RotatingWord() {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setI((v) => (v + 1) % WORDS.length), 2300);
+    return () => clearInterval(id);
+  }, []);
   return (
-    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-      <div className="absolute inset-0 bg-bg" />
-      <div className="bg-grid absolute inset-0" />
-      <div
-        className="glow-a absolute -top-32 left-[-10%] h-[560px] w-[720px] rounded-full opacity-60"
-        style={{ background: "radial-gradient(closest-side, rgba(255,178,36,0.09), transparent 70%)" }}
-      />
-      <div
-        className="glow-b absolute right-[-12%] top-[36%] h-[620px] w-[760px] rounded-full opacity-50"
-        style={{ background: "radial-gradient(closest-side, rgba(63,217,182,0.075), transparent 70%)" }}
-      />
-      <div
-        className="absolute bottom-[-18%] left-[22%] h-[480px] w-[640px] rounded-full opacity-40"
-        style={{ background: "radial-gradient(closest-side, rgba(255,122,28,0.06), transparent 70%)" }}
-      />
-    </div>
+    <span className="relative inline-block bg-lime px-2 leading-[1.05] text-ink sm:px-3">
+      <span key={i} className="anim-wordin inline-block">
+        {WORDS[i]}
+      </span>
+    </span>
   );
 }
 
 function TopBar() {
-  const links = [
-    ["#generateur", "Générateur"],
-    ["#prereqs", "Prérequis"],
-    ["#methodes", "Méthodes"],
-    ["#checklist", "Checklist"],
-  ];
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 12);
+    fn();
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => window.removeEventListener("scroll", fn);
+  }, []);
   return (
-    <header className="sticky top-0 z-40 border-b border-line/70 bg-bg/85 backdrop-blur-md">
-      <div className="mx-auto flex h-14 max-w-[1200px] items-center justify-between px-5 lg:px-8">
-        <a href="#generateur" className="group flex items-center gap-2.5">
-          <span className="grid h-8 w-8 place-items-center rounded-lg border border-gold/35 bg-gold/10 text-gold transition group-hover:bg-gold/20">
-            <LogoIcon className="h-[18px] w-[18px]" />
+    <header
+      className={`sticky top-0 z-40 border-b transition-all duration-300 ${
+        scrolled ? "border-line bg-paper/90 shadow-[0_8px_30px_-18px_rgba(11,19,14,0.3)] backdrop-blur-md" : "border-transparent bg-paper/60 backdrop-blur-sm"
+      }`}
+    >
+      <div className="mx-auto flex max-w-7xl items-center gap-6 px-5 py-3.5 sm:px-8">
+        <a href="#produit" className="flex items-center gap-2.5 font-display text-xl tracking-tight text-ink">
+          <span className="grid h-8 w-8 place-items-center rounded-md bg-ink text-lime transition-transform hover:-rotate-6">
+            <PlugIcon className="h-4.5 w-4.5" />
           </span>
-          <span className="font-display text-[17px] font-extrabold tracking-tight text-ink">
-            hub<span className="text-gold">clone</span>
-          </span>
-          <span className="hidden rounded-full border border-line px-2 py-[1px] font-mono text-[9.5px] text-dim sm:inline">
-            v1.4.2
-          </span>
+          AUTONOME
         </a>
-        <nav className="flex items-center gap-1">
-          {links.map(([href, label]) => (
-            <a
-              key={href}
-              href={href}
-              className="hidden rounded-md px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-mut transition hover:bg-panel2 hover:text-gold md:inline"
-            >
+        <nav className="ml-auto hidden items-center gap-6 font-mono text-[12px] font-bold uppercase tracking-wider text-ink2 lg:flex">
+          {[
+            ["Console", "#produit"],
+            ["Coûts", "#couts"],
+            ["Moteur", "#moteur"],
+            ["Agents", "#agents"],
+            ["Tarifs", "#tarifs"],
+            ["FAQ", "#faq"],
+          ].map(([label, href]) => (
+            <a key={href} href={href} className="relative py-1 transition-colors hover:text-pine after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-pine after:transition-all hover:after:w-full">
               {label}
             </a>
           ))}
-          <a
-            href="https://huggingface.co/docs/hub/git-xet"
-            target="_blank"
-            rel="noreferrer"
-            className="ml-1 flex items-center gap-1.5 rounded-md border border-line bg-panel px-3 py-1.5 font-mono text-[11px] text-mut transition hover:border-gold/40 hover:text-gold"
-          >
-            docs Hub <ArrowIcon className="h-3 w-3 -rotate-45" />
-          </a>
         </nav>
+        <div className="ml-auto flex items-center gap-3 lg:ml-0">
+          <span className="hidden items-center gap-2 rounded-full border border-line bg-card px-3 py-1.5 font-mono text-[11px] text-mut md:flex">
+            <span className="anim-pulsedot h-2 w-2 rounded-full bg-pine" />
+            0 token utilisé
+          </span>
+          <a
+            href="#installation"
+            className="rounded-md bg-ink px-4 py-2 font-mono text-[12px] font-bold uppercase tracking-wider text-lime transition-all hover:bg-pinedeep hover:text-paper active:scale-95"
+          >
+            Installer
+          </a>
+        </div>
       </div>
     </header>
   );
 }
 
-function Sparkline() {
+function Hero() {
   return (
-    <svg viewBox="0 0 132 36" className="h-9 w-full" preserveAspectRatio="none" aria-hidden>
-      <defs>
-        <linearGradient id="sparkfill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#ffb224" stopOpacity="0.28" />
-          <stop offset="100%" stopColor="#ffb224" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <path
-        d="M0 30 L12 27 L24 29 L36 22 L48 24 L60 17 L72 19 L84 12 L96 15 L108 8 L120 10 L132 3 L132 36 L0 36 Z"
-        fill="url(#sparkfill)"
-      />
-      <path
-        className="spark-line"
-        d="M0 30 L12 27 L24 29 L36 22 L48 24 L60 17 L72 19 L84 12 L96 15 L108 8 L120 10 L132 3"
-        fill="none"
-        stroke="#ffb224"
-        strokeWidth="1.6"
-      />
-      <circle cx="132" cy="3" r="2.4" fill="#3fd9b6" />
-    </svg>
-  );
-}
+    <section className="relative overflow-hidden">
+      <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 pb-20 pt-14 sm:px-8 lg:grid-cols-[1.02fr_0.98fr] lg:gap-14 lg:pb-24 lg:pt-20">
+        {/* left — the pitch */}
+        <div>
+          <p className="inline-flex items-center gap-2.5 rounded-full border border-line bg-card px-4 py-2 font-mono text-[11.5px] font-bold uppercase tracking-wider text-pinedeep">
+            <ChipIcon className="h-4 w-4" />
+            Moteur Qwen3.8-27B chargé en mémoire · prêt
+          </p>
+          <h1 className="mt-7 font-display text-[2.9rem] leading-[0.94] tracking-tight text-ink sm:text-7xl lg:text-[5.2rem]">
+            L'IA QUI
+            <br />
+            BOSSE SEULE,
+            <br />
+            CHEZ VOUS.
+            <br />
+            <span className="mt-2 inline-block">
+              <RotatingWord />
+            </span>
+          </h1>
+          <p className="mt-7 max-w-lg text-lg leading-relaxed text-mut">
+            Autonome orchestre des agents IA qui <strong className="text-ink">raisonnent, exécutent et livrent</strong> sur
+            votre propre machine. Pas de clé API à coller, pas de compteur qui tourne, pas de données qui partent —
+            le forfait est fixe, l'usage est illimité.
+          </p>
+          <div className="mt-9 flex flex-wrap items-center gap-4">
+            <a
+              href="#installation"
+              className="group inline-flex items-center gap-3 rounded-lg bg-ink px-7 py-4 font-mono text-[13px] font-bold uppercase tracking-wider text-lime shadow-[6px_6px_0_0_var(--color-lime)] transition-all hover:-translate-y-0.5 hover:shadow-[8px_8px_0_0_var(--color-lime)] active:translate-y-0 active:shadow-[3px_3px_0_0_var(--color-lime)]"
+            >
+              Installer la démo
+              <ArrowIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </a>
+            <a
+              href="#moteur"
+              className="inline-flex items-center gap-2.5 rounded-lg border-2 border-ink px-6 py-[14px] font-mono text-[13px] font-bold uppercase tracking-wider text-ink transition-colors hover:bg-ink hover:text-paper"
+            >
+              Voir le moteur
+            </a>
+          </div>
+          <p className="mt-8 font-mono text-[11.5px] uppercase tracking-wider text-mut">
+            qwen3.8-27b · q4_k_m · 16,9 Go · macos — linux — wsl
+          </p>
+        </div>
 
-function RepoCard({ s }: { s: BuilderState }) {
-  const files = useMemo(() => simFiles({ ...s, method: s.method === "hf" ? "hf" : "xet" }), [s]);
-  const total = files.reduce((a, f) => a + f.size, 0);
-  const valid = isValid(s);
-  return (
-    <div className="rounded-xl border border-line bg-panel/80 p-4 backdrop-blur-sm">
-      <div className="flex items-center justify-between gap-2">
-        <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-dim">fiche dépôt</span>
-        <span className="flex items-center gap-1.5 font-mono text-[10px] text-teal">
-          <span className="h-1.5 w-1.5 rounded-full bg-teal anim-pulsedot" /> synchronisé
-        </span>
-      </div>
-      <p className="mt-2 truncate font-mono text-[12.5px] text-ink">
-        <span className="text-dim">hf.co/</span>
-        {valid ? (
-          <>
-            <span className="text-gold">{s.org.trim()}</span>
-            <span className="text-dim">/</span>
-            {s.model.trim()}
-          </>
-        ) : (
-          <span className="text-dim">—</span>
-        )}
-      </p>
-      <div className="mt-3 flex flex-wrap gap-1.5">
-        {["Safetensors", "13 shards", "Transformers", "apache-2.0"].map((c) => (
-          <span key={c} className="rounded-md border border-line bg-inset px-2 py-[3px] font-mono text-[10px] text-mut">
-            {c}
-          </span>
-        ))}
-        <span className="rounded-md border border-gold/35 bg-gold/10 px-2 py-[3px] font-mono text-[10px] font-medium text-gold">
-          ≈ {valid ? fmtBytes(total) : "—"}
-        </span>
-      </div>
-      <div className="mt-4 border-t border-line/70 pt-3">
-        <div className="flex items-baseline justify-between">
-          <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-dim">téléchargements / mois</span>
-          <span className="font-display text-[18px] font-extrabold text-ink">182 k</span>
-        </div>
-        <div className="mt-1.5">
-          <Sparkline />
+        {/* right — the product, live */}
+        <div className="relative">
+          <div className="absolute -inset-6 -z-10 rounded-2xl bg-ink/5" aria-hidden />
+          <Console />
+          <p className="mt-4 text-center font-mono text-[11.5px] text-mut">
+            ↑ c'est le vrai produit : lancez une tâche, tout s'exécute « localement » — compteur de tokens : 0, pour toujours.
+          </p>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
 export default function App() {
-  const [s, setS] = useState<BuilderState>(DEFAULT_STATE);
-  const [toast, setToast] = useState<{ id: number; msg: string } | null>(null);
-
-  const patch = useCallback((p: Partial<BuilderState>) => setS((prev) => ({ ...prev, ...p })), []);
-  const notify = useCallback((msg: string) => setToast({ id: Date.now(), msg }), []);
-
-  const blocks = useMemo(() => (isValid(s) ? buildBlocks(s) : []), [s]);
-
   return (
-    <div className="relative min-h-screen font-body text-ink">
-      <Background />
-      <div className="fixed inset-x-0 top-0 z-50 h-[3px] bg-gradient-to-r from-gold via-ember to-teal" />
-      <TopBar />
+    <div className="relative min-h-screen">
+      {/* ambient layers */}
+      <div className="bg-gridlight pointer-events-none absolute inset-0" aria-hidden />
+      <div className="pointer-events-none absolute -top-40 right-[-180px] h-[560px] w-[560px] rounded-full bg-pine/12 blur-[150px]" aria-hidden />
+      <div className="pointer-events-none absolute left-[-220px] top-[42%] h-[480px] w-[480px] rounded-full bg-lime/20 blur-[150px]" aria-hidden />
 
-      <main className="mx-auto max-w-[1200px] px-5 lg:px-8">
-        {/* ---------------- ouverture ---------------- */}
-        <div className="grid items-end gap-8 pb-10 pt-12 lg:grid-cols-[1.55fr_1fr] lg:pt-16">
-          <Reveal>
-            <p className="flex items-center gap-2.5 font-mono text-[11px] font-medium uppercase tracking-[0.22em] text-gold">
-              <span className="inline-block h-[7px] w-[7px] rotate-45 bg-gold" />
-              hub → machine · git-xet / lfs / hf cli
-            </p>
-            <h1 className="mt-4 font-display text-[clamp(2.3rem,4.8vw,3.9rem)] font-extrabold leading-[1.04] tracking-tight">
-              Clonez <span className="text-gold">ce dépôt</span>
-              <br />
-              de modèles.
-            </h1>
-            <p className="mt-4 max-w-[56ch] text-[15px] leading-relaxed text-mut">
-              Trois façons d'obtenir <span className="font-mono text-[13.5px] text-ink">OBLITERATUS/Qwen3.8-27B-OBLITERATED</span>{" "}
-              sur votre disque : le clone dédupliqué <strong className="font-semibold text-ink">git-xet</strong>, le squelette en{" "}
-              <strong className="font-semibold text-ink">pointeurs LFS</strong>, ou la{" "}
-              <strong className="font-semibold text-ink">CLI hf</strong> avec filtres. Choisissez, copiez, téléchargez.
-            </p>
-          </Reveal>
-          <Reveal delay={120}>
-            <RepoCard s={s} />
-          </Reveal>
-        </div>
-
-        {/* ---------------- générateur + terminal ---------------- */}
-        <section id="generateur" className="scroll-mt-24">
-          <div className="grid items-start gap-6 lg:grid-cols-[1fr_1.06fr]">
-            <Reveal>
-              <Builder s={s} patch={patch} />
-            </Reveal>
-            <Reveal delay={100} className="lg:sticky lg:top-[72px]">
-              <TerminalPanel s={s} blocks={blocks} notify={notify} />
-            </Reveal>
-          </div>
-        </section>
-
-        {/* ---------------- sections basses ---------------- */}
-        <div className="mt-24 space-y-24">
-          <Reveal>
-            <Prereqs notify={notify} />
-          </Reveal>
-          <Reveal>
-            <Compare />
-          </Reveal>
-          <Reveal>
-            <Checklist />
-          </Reveal>
-        </div>
-      </main>
-
-      <Footer />
-      <Toast toast={toast} />
+      <div className="relative">
+        <TopBar />
+        <main>
+          <Hero />
+          <Marquee />
+          <LiveStats />
+          <CostCalc />
+          <Proof />
+          <Engine />
+          <Agents />
+          <Pricing />
+          <Faq />
+          <FinalCta />
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 }
