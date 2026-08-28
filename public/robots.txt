@@ -1,0 +1,37 @@
+# autonome.sh — politique d'indexation
+# Aucune dépendance à Google : tous les moteurs et agents IA sont invités.
+
+User-agent: *
+Allow: /
+
+# Moteurs de recherche indépendants
+User-agent: DuckDuckBot
+Allow: /
+User-agent: Bingbot
+Allow: /
+User-agent: Qwantbot
+Allow: /
+User-agent: BraveBot
+Allow: /
+User-agent: Ecosia
+Allow: /
+
+# Agents de moteurs de réponse (GEO / AEO) — citation explicite autorisée
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-Web
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Meta-ExternalAgent
+Allow: /
+User-agent: cohere-ai
+Allow: /
+User-agent: MistralAI-User
+Allow: /
+
+Sitemap: https://autonome.sh/sitemap.xml

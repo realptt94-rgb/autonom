@@ -871,7 +871,7 @@ export function Footer() {
   return (
     <footer className="border-t border-line bg-paper2/60">
       <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8">
-        <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+        <div className="grid gap-10 md:grid-cols-[1.3fr_1fr_1fr_1fr_1.2fr]">
           <div>
             <p className="flex items-center gap-2.5 font-display text-2xl tracking-tight text-ink">
               <span className="grid h-9 w-9 place-items-center rounded-lg bg-ink text-lime">
@@ -928,11 +928,60 @@ export function Footer() {
               </ul>
             </nav>
           ))}
+          <nav>
+            <p className="font-mono text-[11px] font-bold uppercase tracking-[0.22em] text-mut">Écosystème & présence</p>
+            <ul className="mt-4 space-y-2.5">
+              {[
+                ["Modèle sur Hugging Face", "https://huggingface.co/OBLITERATUS/Qwen3.8-27B-OBLITERATED"],
+                ["Qwen (GitHub)", "https://github.com/QwenLM/Qwen3"],
+                ["llama.cpp", "https://github.com/ggml-org/llama.cpp"],
+                ["PWA — doc MDN", "https://developer.mozilla.org/fr/docs/Web/Progressive_web_apps"],
+                ["r/LocalLLaMA", "https://www.reddit.com/r/LocalLLaMA/"],
+                ["Flux RSS", "/feed.xml"],
+              ].map(([item, href]) => (
+                <li key={item}>
+                  <a
+                    href={href}
+                    {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                    className="text-[14px] text-ink2 transition-colors hover:text-pine"
+                  >
+                    {item} ↗
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
-        <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6 font-mono text-[11.5px] text-mut">
+
+        {/* maillage externe : nous trouver hors Google */}
+        <div className="mt-10 flex flex-wrap items-center gap-2.5">
+          <span className="mr-1 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-mut">
+            Nous trouver — sans Google :
+          </span>
+          {[
+            ["DuckDuckGo", "https://duckduckgo.com/?q=autonome+ia+locale+sans+token"],
+            ["Brave", "https://search.brave.com/search?q=autonome+ia+locale+qwen"],
+            ["Bing", "https://www.bing.com/search?q=autonome+ia+locale+sans+token"],
+            ["Qwant", "https://www.qwant.com/?q=autonome%20ia%20locale"],
+            ["Ecosia", "https://www.ecosia.org/search?q=autonome+ia+locale"],
+            ["Perplexity", "https://www.perplexity.ai/search?q=Autonome%20IA%20locale%20sans%20token"],
+            ["RSS", "/feed.xml"],
+          ].map(([label, href]) => (
+            <a
+              key={label}
+              href={href}
+              {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              className="rounded-full border border-line bg-card px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-ink2 transition-all hover:border-pine hover:bg-pine hover:text-paper"
+            >
+              {label} ↗
+            </a>
+          ))}
+        </div>
+
+        <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6 font-mono text-[11.5px] text-mut">
           <span>© 2026 Autonome SAS — fait en France, inféré chez vous.</span>
           <span className="flex items-center gap-2">
-            <LockIcon className="h-3.5 w-3.5" /> aucune donnée n'a quitté cette page
+            <LockIcon className="h-3.5 w-3.5" /> 0 requête Google sur cette page — polices auto-hébergées
           </span>
         </div>
       </div>

@@ -17,13 +17,13 @@
     { "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
     { "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" },
     {
-      "src": "https://image.qwenlm.ai/generated-images/5265bc6f-b1e4-45ed-aca9-f1dd85690d35/_result.png",
+      "src": "https://image.qwenlm.ai/generated-images/6529af4e-eeff-4577-baa5-26f66e271d65/_result.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://image.qwenlm.ai/generated-images/5265bc6f-b1e4-45ed-aca9-f1dd85690d35/_result.png",
+      "src": "https://image.qwenlm.ai/generated-images/6529af4e-eeff-4577-baa5-26f66e271d65/_result.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"

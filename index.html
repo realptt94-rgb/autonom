@@ -3,29 +3,166 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- SEO : bases -->
+    <title>Autonome — Agents IA 100 % locaux sur Qwen3.8-27B, sans token ni API key</title>
     <meta
       name="description"
-      content="Autonome — le SaaS d'agents IA qui tourne 100 % chez vous sur Qwen3.8-27B. Zéro token facturé, zéro API key, zéro cloud."
+      content="Autonome orchestre des agents IA autonomes qui s'exécutent chez vous sur Qwen3.8-27B « Obliterated ». Zéro token facturé, zéro API key, zéro cloud. Installable sur macOS, Windows et Linux, fonctionne hors-ligne. Forfaits fixes dès 29 €/mois."
     />
-    <title>Autonome — L'app IA locale, sans token</title>
+    <meta
+      name="keywords"
+      content="IA locale, agent IA autonome, LLM local, Qwen 27B, sans token, sans API key, inférence locale, IA hors-ligne, IA privée, PWA installable, macOS, Windows, Linux"
+    />
+    <meta name="author" content="Autonome SAS" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <link rel="canonical" href="https://autonome.sh/" />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Autonome — Journal de bord" href="/feed.xml" />
+
+    <!-- GEO : géolocalisation éditoriale -->
+    <meta name="geo.region" content="FR" />
+    <meta name="geo.placename" content="Paris, France" />
+    <meta name="ICBM" content="48.8566, 2.3522" />
+    <link rel="alternate" hreflang="fr" href="https://autonome.sh/" />
+    <link rel="alternate" hreflang="x-default" href="https://autonome.sh/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Autonome" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:url" content="https://autonome.sh/" />
+    <meta property="og:title" content="Autonome — L'IA qui bosse seule, chez vous. Sans token." />
+    <meta
+      property="og:description"
+      content="Des agents IA autonomes sur Qwen3.8-27B, exécutés 100 % en local. Aucun token, aucune API key, aucun cloud. Installable sur Mac, PC et Linux."
+    />
+    <meta property="og:image" content="https://image.qwenlm.ai/generated-images/baa1466d-6f1b-42fd-9dba-5a4454aa0ba6/_result.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Autonome — L'IA locale, sans token" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Autonome — L'IA qui bosse seule, chez vous. Sans token." />
+    <meta
+      name="twitter:description"
+      content="Agents IA autonomes sur Qwen3.8-27B, 100 % locaux. Zéro token, zéro API key. macOS · Windows · Linux."
+    />
+    <meta name="twitter:image" content="https://image.qwenlm.ai/generated-images/baa1466d-6f1b-42fd-9dba-5a4454aa0ba6/_result.png" />
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="theme-color" content="#0b130e" />
-    <meta name="application-name" content="Autonome" />
-    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
+    <link rel="apple-touch-icon" href="/icons/icon.svg" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Autonome" />
-    <link rel="manifest" href="/manifest.webmanifest" />
-    <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
-    <link
-      rel="apple-touch-icon"
-      href="https://image.qwenlm.ai/generated-images/5265bc6f-b1e4-45ed-aca9-f1dd85690d35/_result.png"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
+    <meta name="application-name" content="Autonome" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <!-- AEO : données structurées (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://autonome.sh/#org",
+            "name": "Autonome",
+            "legalName": "Autonome SAS",
+            "url": "https://autonome.sh/",
+            "logo": "https://autonome.sh/icons/icon.svg",
+            "email": "bonjour@autonome.sh",
+            "address": { "@type": "PostalAddress", "addressLocality": "Paris", "addressCountry": "FR" },
+            "sameAs": [
+              "https://huggingface.co/OBLITERATUS/Qwen3.8-27B-OBLITERATED",
+              "https://github.com/QwenLM/Qwen3",
+              "https://www.reddit.com/r/LocalLLaMA/"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://autonome.sh/#website",
+            "url": "https://autonome.sh/",
+            "name": "Autonome — Agents IA 100 % locaux, sans token",
+            "inLanguage": "fr-FR",
+            "publisher": { "@id": "https://autonome.sh/#org" }
+          },
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://autonome.sh/#app",
+            "name": "Autonome",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "macOS, Windows, Linux",
+            "softwareVersion": "0.9.4",
+            "downloadUrl": "https://autonome.sh/#installation",
+            "installUrl": "https://autonome.sh/#installation",
+            "fileSize": "16.9 GB",
+            "isAccessibleForFree": false,
+            "featureList": [
+              "Agents IA autonomes exécutés en local",
+              "Moteur Qwen3.8-27B quantifié Q4_K_M",
+              "Aucun token facturé, aucune API key requise",
+              "Fonctionnement hors-ligne vérifiable",
+              "Journal d'audit et annulations",
+              "Installation macOS, Windows et Linux"
+            ],
+            "offers": [
+              { "@type": "Offer", "name": "Solo", "price": "29", "priceCurrency": "EUR", "description": "1 agent, tâches illimitées" },
+              { "@type": "Offer", "name": "Studio", "price": "79", "priceCurrency": "EUR", "description": "Agents et tâches illimités, orchestration multi-agents" }
+            ],
+            "publisher": { "@id": "https://autonome.sh/#org" }
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "« Sans token », c'est une figure de style ?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Non, c'est l'architecture. Le moteur tourne en inférence locale sur votre machine : il n'existe aucun compteur d'usage à facturer. Le forfait débloque des agents et des connecteurs, jamais des unités de calcul — aucune facturation à la consommation, quel que soit le volume."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Quelle machine faut-il pour faire tourner l'IA en local ?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Un Mac M1/M2/M3 avec 32 Go de mémoire unifiée est la configuration reine : 24 tokens/seconde. Sur PC, 18 Go de VRAM (RTX 4090/5080) donnent des résultats équivalents. Sans GPU, 64 Go de RAM suffisent en mode asynchrone."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Mes données restent-elles vraiment chez moi ?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Oui, et c'est vérifiable : en mode avion tout continue de fonctionner. La télémétrie est coupée par défaut, le contexte est monté en mémoire locale, et rien ne sort sans un connecteur explicitement activé."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Comment installer Autonome sur macOS, Windows ou Linux ?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Une ligne de commande (curl -sSL https://get.autonome.sh | bash), environ 90 secondes, ou l'installation en 1 clic depuis Chrome, Edge, Brave, Safari ou Firefox. L'app apparaît dans le Dock, le menu Démarrer ou le lanceur Linux et fonctionne hors-ligne."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Que se passe-t-il si je résilie mon abonnement ?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Vous gardez tout : journaux, livrables et réglages restent sur votre disque au format ouvert. Le moteur peut continuer à servir en CLI libre — seul l'orchestrateur d'agents s'arrête. Aucun verrou, aucune donnée otage."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

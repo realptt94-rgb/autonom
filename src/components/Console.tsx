@@ -53,15 +53,41 @@ const TEMPLATES: Template[] = [
 
 type Status = "idle" | "running" | "done";
 
+const STORE_KEY = "autonome:console";
+type Stored = { runs: number; offline: boolean; last: { task: string; result: string } | null };
+
+function loadStored(): Stored {
+  const fallback: Stored = { runs: 0, offline: false, last: null };
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (!raw) return fallback;
+    return { ...fallback, ...(JSON.parse(raw) as Partial<Stored>) };
+  } catch {
+    return fallback;
+  }
+}
+
 export default function Console() {
   const [status, setStatus] = useState<Status>("idle");
   const [stepIdx, setStepIdx] = useState(0);
   const [tpl, setTpl] = useState<Template>(TEMPLATES[0]);
   const [input, setInput] = useState("");
-  const [offline, setOffline] = useState(false);
+  const [stored, setStored] = useState<Stored>(loadStored);
+  const { offline, runs, last } = stored;
+  const setOffline = (v: boolean | ((o: boolean) => boolean)) =>
+    setStored((s) => ({ ...s, offline: typeof v === "function" ? v(s.offline) : v }));
   const [elapsed, setElapsed] = useState(0);
   const timers = useRef<number[]>([]);
   const logRef = useRef<HTMLDivElement>(null);
+
+  // la console se souvient : compteur de tâches, mode hors-ligne et dernier livrable survivent au rechargement.
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORE_KEY, JSON.stringify(stored));
+    } catch {
+      /* stockage indisponible : la session reste fonctionnelle */
+    }
+  }, [stored]);
 
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
   useEffect(() => {
@@ -83,7 +109,10 @@ export default function Console() {
         window.setTimeout(() => {
           setStepIdx(i + 1);
           setElapsed(done / 1000);
-          if (i === t.steps.length - 1) setStatus("done");
+          if (i === t.steps.length - 1) {
+            setStatus("done");
+            setStored((s) => ({ ...s, runs: s.runs + 1, last: { task: t.task, result: t.result } }));
+          }
         }, done)
       );
     });
@@ -116,8 +145,13 @@ export default function Console() {
           <span className="h-2.5 w-2.5 rounded-full bg-amber/80" />
           <span className="h-2.5 w-2.5 rounded-full bg-pine/80" />
         </div>
-        <span className="font-mono text-[11px] tracking-wide text-mutdark">
+        <span className="min-w-0 truncate font-mono text-[11px] tracking-wide text-mutdark">
           autonome — agent local v0.9.4
+          {runs > 0 && (
+            <span className="ml-2 rounded-full border border-pine/50 bg-pine/15 px-2 py-0.5 text-[10px] text-pine">
+              {runs} tâche{runs > 1 ? "s" : ""} sur ce poste
+            </span>
+          )}
         </span>
         <button
           onClick={() => setOffline((o) => !o)}
@@ -141,10 +175,18 @@ export default function Console() {
         </p>
 
         {status === "idle" && (
-          <p className="mt-2 text-mutdark">
-            moteur chargé en mémoire · 16,9 Go · prêt.
-            <span className="anim-blink ml-1 inline-block h-4 w-2 translate-y-0.5 bg-lime" />
-          </p>
+          <>
+            <p className="mt-2 text-mutdark">
+              moteur chargé en mémoire · 16,9 Go · prêt.
+              <span className="anim-blink ml-1 inline-block h-4 w-2 translate-y-0.5 bg-lime" />
+            </p>
+            {last && (
+              <p className="anim-fadeup mt-2 text-mutdark">
+                <span className="text-pine">↳ dernière tâche</span> — {last.task}{" "}
+                <span className="text-paper/40">[livrable archivé dans ./sorties/ · journal conservé]</span>
+              </p>
+            )}
+          </>
         )}
 
         {status !== "idle" && (

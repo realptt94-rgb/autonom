@@ -14,6 +14,7 @@ import {
 } from "./components/Sections";
 import { AppleIcon, ArrowIcon, CheckIcon, ChipIcon, DownloadIcon, LinuxIcon, PlugIcon, WindowsIcon } from "./components/icons";
 import InstallModal from "./components/InstallModal";
+import Visibility from "./components/Visibility";
 import { useInstall, type OS } from "./lib/install";
 
 const WORDS = ["SANS TOKEN.", "SANS API KEY.", "SANS CLOUD.", "SANS FACTURE."];
@@ -57,6 +58,7 @@ function TopBar({ installed, onInstall }: { installed: boolean; onInstall: () =>
         <nav className="ml-auto hidden items-center gap-6 font-mono text-[12px] font-bold uppercase tracking-wider text-ink2 lg:flex">
           {[
             ["Console", "#produit"],
+            ["Visibilité", "#visibilite"],
             ["Coûts", "#couts"],
             ["Moteur", "#moteur"],
             ["Agents", "#agents"],
@@ -145,7 +147,7 @@ function Hero({ installed, onInstall }: { installed: boolean; onInstall: () => v
           <div className="absolute -inset-6 -z-10 rounded-2xl bg-ink/5" aria-hidden />
           <Console />
           <p className="mt-4 text-center font-mono text-[11.5px] text-mut">
-            ↑ c'est le vrai produit : lancez une tâche, tout s'exécute « localement » — compteur de tokens : 0, pour toujours.
+            ↑ console agent en production — chaque tâche s'exécute sur votre machine, le compteur de tokens API reste à 0.
           </p>
         </div>
       </div>
@@ -208,6 +210,7 @@ export default function App() {
         <main>
           <Hero installed={installed} onInstall={handleInstall} />
           <Marquee />
+          <Visibility />
           <LiveStats />
           <CostCalc />
           <Proof />
