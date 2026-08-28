@@ -203,6 +203,23 @@ export function CloseIcon({ className }: P) {
   );
 }
 
+export function StopIcon({ className }: P) {
+  return (
+    <svg viewBox="0 0 24 24" className={className}>
+      <rect x="6.4" y="6.4" width="11.2" height="11.2" rx="1.8" fill="currentColor" />
+    </svg>
+  );
+}
+
+export function KeyIcon({ className }: P) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} {...S}>
+      <circle cx="8" cy="12" r="3.6" />
+      <path d="M11.6 12h8.2M17.2 12v3M14.4 12v2.2" />
+    </svg>
+  );
+}
+
 export function AppleIcon({ className }: P) {
   return (
     <svg viewBox="0 0 24 24" className={className}>

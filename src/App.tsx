@@ -132,7 +132,7 @@ function Hero({ installed, onInstall }: { installed: boolean; onInstall: () => v
             </a>
           </div>
           <p className="mt-8 font-mono text-[11.5px] uppercase tracking-wider text-mut">
-            qwen3.8-27b · q4_k_m · 16,9 Go
+            qwen3.8-27b · q4_k_m · 16,9 go · mode live : routeur hf (bf16, streaming)
           </p>
           <div className="mt-3.5 flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[12px] text-mut">
             <span className="flex items-center gap-2"><AppleIcon className="h-4 w-4 text-ink" /> macOS</span>
@@ -147,7 +147,8 @@ function Hero({ installed, onInstall }: { installed: boolean; onInstall: () => v
           <div className="absolute -inset-6 -z-10 rounded-2xl bg-ink/5" aria-hidden />
           <Console />
           <p className="mt-4 text-center font-mono text-[11.5px] text-mut">
-            ↑ console agent en production — chaque tâche s'exécute sur votre machine, le compteur de tokens API reste à 0.
+            ↑ console agent en production — moteur local par défaut ; passez en « live » pour interroger le vrai
+            Qwen3.8-27B en streaming via le routeur Hugging Face. Votre token reste dans le navigateur, Autonome ne facture rien.
           </p>
         </div>
       </div>

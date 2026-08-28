@@ -449,6 +449,46 @@ export function Engine() {
               </dl>
             </div>
 
+            <div className="rounded-xl border border-lime/35 bg-lime/6 p-6 sm:p-7">
+              <p className="flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.22em] text-lime">
+                <PlugIcon className="h-4 w-4" /> Mode live — routeur Hugging Face
+              </p>
+              <p className="mt-4 text-[14.5px] leading-relaxed text-paper/85">
+                Le local est la règle ; le live est l'option. Depuis la console, basculez en « live » pour interroger{" "}
+                <span className="font-mono text-[13px] text-lime">qwen3.8-27b-aeon · bf16</span> en streaming réel, via{" "}
+                <span className="font-mono text-[13px] text-lime">router.huggingface.co</span>, avec une conversation qui garde son contexte.
+              </p>
+              <ul className="mt-4 space-y-2.5">
+                {[
+                  "Votre token HF est stocké dans votre navigateur — jamais chez nous",
+                  "Flux SSE mot à mot, interruption possible à tout moment",
+                  "Autonome ne facture rien : le débit passe par votre propre quota HF",
+                ].map((t) => (
+                  <li key={t} className="flex items-start gap-2.5 text-[13.5px] leading-relaxed text-paper/75">
+                    <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-lime" /> {t}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-5 flex flex-wrap gap-2">
+                <a
+                  href="https://huggingface.co/settings/tokens"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-md bg-lime px-3.5 py-2 font-mono text-[11px] font-bold uppercase tracking-wider text-ink transition-colors hover:bg-limedark"
+                >
+                  créer un token ↗
+                </a>
+                <a
+                  href="https://huggingface.co/docs/api-inference"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-md border border-linedark px-3.5 py-2 font-mono text-[11px] font-bold uppercase tracking-wider text-mutdark transition-colors hover:border-lime hover:text-lime"
+                >
+                  doc routeur ↗
+                </a>
+              </div>
+            </div>
+
             <div className="rounded-xl border border-pine/35 bg-pine/8 p-6 sm:p-7">
               <p className="flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.22em] text-lime">
                 <LockIcon className="h-4 w-4" /> Chaîne de confiance
