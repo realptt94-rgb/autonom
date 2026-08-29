@@ -15,6 +15,7 @@ import {
 import { AppleIcon, ArrowIcon, CheckIcon, ChipIcon, DownloadIcon, LinuxIcon, PlugIcon, WindowsIcon } from "./components/icons";
 import InstallModal from "./components/InstallModal";
 import Visibility from "./components/Visibility";
+import Firewall from "./components/Firewall";
 import { useInstall, type OS } from "./lib/install";
 
 const WORDS = ["SANS TOKEN.", "SANS API KEY.", "SANS CLOUD.", "SANS FACTURE."];
@@ -61,6 +62,7 @@ function TopBar({ installed, onInstall }: { installed: boolean; onInstall: () =>
             ["Visibilité", "#visibilite"],
             ["Coûts", "#couts"],
             ["Moteur", "#moteur"],
+            ["Pare-feu", "#pare-feu"],
             ["Agents", "#agents"],
             ["Tarifs", "#tarifs"],
             ["FAQ", "#faq"],
@@ -217,6 +219,7 @@ export default function App() {
           <Proof />
           <Engine />
           <Agents />
+          <Firewall />
           <Pricing />
           <Faq />
           <FinalCta onOpenInstall={openGuide} detectedOs={os} />
