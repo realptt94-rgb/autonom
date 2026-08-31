@@ -16,7 +16,7 @@ import { AppleIcon, ArrowIcon, CheckIcon, ChipIcon, DownloadIcon, LinuxIcon, Plu
 import InstallModal from "./components/InstallModal";
 import Visibility from "./components/Visibility";
 import Firewall from "./components/Firewall";
-import { useInstall, type OS } from "./lib/install";
+import { useInstall, type OS, type PromptState } from "./lib/install";
 
 const WORDS = ["SANS TOKEN.", "SANS API KEY.", "SANS CLOUD.", "SANS FACTURE."];
 
@@ -92,7 +92,7 @@ function TopBar({ installed, onInstall }: { installed: boolean; onInstall: () =>
   );
 }
 
-function Hero({ installed, onInstall }: { installed: boolean; onInstall: () => void }) {
+function Hero({ installed, onInstall, state }: { installed: boolean; onInstall: () => void; state: PromptState }) {
   return (
     <section className="relative overflow-hidden">
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 pb-20 pt-14 sm:px-8 lg:grid-cols-[1.02fr_0.98fr] lg:gap-14 lg:pb-24 lg:pt-20">
@@ -140,7 +140,17 @@ function Hero({ installed, onInstall }: { installed: boolean; onInstall: () => v
             <span className="flex items-center gap-2"><AppleIcon className="h-4 w-4 text-ink" /> macOS</span>
             <span className="flex items-center gap-2"><WindowsIcon className="h-4 w-4 text-ink" /> Windows</span>
             <span className="flex items-center gap-2"><LinuxIcon className="h-4 w-4 text-ink" /> Linux</span>
-            <span className="rounded-full bg-pine/15 px-2.5 py-0.5 text-[10.5px] font-bold uppercase tracking-wider text-pinedeep">installable en 1 clic</span>
+            <span
+              className={`rounded-full px-2.5 py-0.5 text-[10.5px] font-bold uppercase tracking-wider ${
+                state === "available"
+                  ? "bg-pine/15 text-pinedeep"
+                  : state === "installed"
+                    ? "bg-lime/25 text-pinedeep"
+                    : "bg-paper2 text-mut"
+              }`}
+            >
+              {state === "available" ? "invite native prête" : state === "installed" ? "app installée" : "installation via guide"}
+            </span>
           </div>
         </div>
 
@@ -159,7 +169,7 @@ function Hero({ installed, onInstall }: { installed: boolean; onInstall: () => v
 }
 
 export default function App() {
-  const { canPrompt, installed, requestInstall, os } = useInstall();
+  const { canPrompt, installed, requestInstall, os, state } = useInstall();
   const [guideOpen, setGuideOpen] = useState(false);
   const [guideOs, setGuideOs] = useState<OS>(os);
   const [toast, setToast] = useState<string | null>(null);
@@ -211,7 +221,7 @@ export default function App() {
       <div className="relative">
         <TopBar installed={installed} onInstall={handleInstall} />
         <main>
-          <Hero installed={installed} onInstall={handleInstall} />
+          <Hero installed={installed} onInstall={handleInstall} state={state} />
           <Marquee />
           <Visibility />
           <LiveStats />
@@ -232,6 +242,7 @@ export default function App() {
         initialOs={guideOs}
         detectedOs={os}
         canPrompt={canPrompt}
+        state={state}
         onRequestNative={handleNativeFromModal}
         onClose={() => setGuideOpen(false)}
       />

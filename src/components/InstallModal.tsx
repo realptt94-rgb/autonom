@@ -1,6 +1,21 @@
 import { useEffect, useState } from "react";
-import { osLabel, type OS } from "../lib/install";
+import { osLabel, type OS, type PromptState } from "../lib/install";
 import { AppleIcon, CheckIcon, CloseIcon, CopyIcon, DownloadIcon, LinuxIcon, PlaneIcon, WindowsIcon } from "./icons";
+
+const STATE_LINE: Record<PromptState, { cls: string; text: string }> = {
+  available: {
+    cls: "border-pine/40 bg-pine/10 text-pine",
+    text: "Invite native détectée — l'installation en 1 clic est prête ci-dessous.",
+  },
+  installed: {
+    cls: "border-lime/40 bg-lime/10 text-lime",
+    text: "Autonome tourne déjà en application sur cette machine.",
+  },
+  unavailable: {
+    cls: "border-linedark bg-ink2/60 text-mutdark",
+    text: "Invite native non disponible ici — suivez le guide de votre système ci-dessous, c'est 30 secondes.",
+  },
+};
 
 const INSTALL_CMD = "curl -sSL https://get.autonome.sh | bash";
 
@@ -106,6 +121,7 @@ export default function InstallModal({
   initialOs,
   detectedOs,
   canPrompt,
+  state,
   onRequestNative,
   onClose,
 }: {
@@ -113,6 +129,7 @@ export default function InstallModal({
   initialOs: OS;
   detectedOs: OS;
   canPrompt: boolean;
+  state: PromptState;
   onRequestNative: () => void;
   onClose: () => void;
 }) {
@@ -169,6 +186,12 @@ export default function InstallModal({
         </div>
 
         <div className="px-6 py-6 sm:px-7">
+          {/* état de l'installation */}
+          <p className={`mb-5 flex items-start gap-2.5 rounded-lg border px-4 py-3 text-[13px] leading-relaxed ${STATE_LINE[state].cls}`}>
+            <span className={`mt-1 h-2 w-2 shrink-0 rounded-full ${state === "available" ? "bg-pine anim-pulsedot" : state === "installed" ? "bg-lime" : "bg-mutdark"}`} />
+            {STATE_LINE[state].text}
+          </p>
+
           {/* native prompt shortcut */}
           {canPrompt && (
             <button
