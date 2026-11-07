@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Autonome — Journal de bord</title>
+    <link>https://autonome.sh/</link>
+    <atom:link href="https://autonome.sh/feed.xml" rel="self" type="application/rss+xml" />
+    <description>Agents IA 100 % locaux sur Qwen3.8-27B « Obliterated ». Zéro token, zéro API key, zéro cloud. macOS · Windows · Linux.</description>
+    <language>fr</language>
+    <lastBuildDate>Thu, 12 Feb 2026 09:00:00 +0100</lastBuildDate>
+    <item>
+      <title>v0.9.4 — Orchestration multi-agents en bêta</title>
+      <link>https://autonome.sh/#agents</link>
+      <guid isPermaLink="false">autonome-0-9-4</guid>
+      <pubDate>Thu, 12 Feb 2026 09:00:00 +0100</pubDate>
+      <description>Le Rédacteur, le Veilleur, le Nettoyeur et le Binôme peuvent désormais se passer la main dans un même pipeline, avec journal d'audit unifié. Toujours 0 token : l'orchestration est locale.</description>
+    </item>
+    <item>
+      <title>Installation Linux : démon systemd user</title>
+      <link>https://autonome.sh/#installation</link>
+      <guid isPermaLink="false">autonome-systemd</guid>
+      <pubDate>Tue, 03 Feb 2026 10:30:00 +0100</pubDate>
+      <description>systemctl --user enable --now autonome : le moteur démarre avec votre session, air-gap total. Entrées .desktop générées pour GNOME, KDE et environnements minimalistes.</description>
+    </item>
+    <item>
+      <title>Moteur 27B : 24 tokens/s vérifiés sur Apple M3</title>
+      <link>https://autonome.sh/#moteur</link>
+      <guid isPermaLink="false">autonome-m3-bench</guid>
+      <pubDate>Mon, 26 Jan 2026 14:00:00 +0100</pubDate>
+      <description>Nouvelle campagne de benchmarks internes : 24 t/s en Q4_K_M sur M3 (32 Go unifiés), 92/100 sur ToolCall-Bench, 96/100 en français natif. Méthodologie publique sur FR-Eval.</description>
+    </item>
+    <item>
+      <title>Chaîne de confiance : poids vérifiés bloc par bloc</title>
+      <link>https://autonome.sh/#moteur</link>
+      <guid isPermaLink="false">autonome-sha256</guid>
+      <pubDate>Thu, 15 Jan 2026 09:45:00 +0100</pubDate>
+      <description>L'installateur contrôle désormais chaque bloc GGUF contre son empreinte sha256 avant chargement, avec déduplication xet si les poids sont déjà présents sur le disque.</description>
+    </item>
+  </channel>
+</rss>
